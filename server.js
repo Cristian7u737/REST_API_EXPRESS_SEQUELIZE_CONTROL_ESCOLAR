@@ -9,7 +9,8 @@ import routerCurso from './src/routes/curso.routes.js';
 import routerPago from './src/routes/pago.routes.js';
 
 const app = express(); /* para crear una aplicación usando express */
-
+/* analizar solicitudes de tipo de contenido - application/json */
+app.use(express.json()); /* es una función de middleware integrada en Express. Analiza las solicitudes entrantes con cargas JSON y se basa en body-parser */  
 /* simple ruta */
 app.get('/', (req, res) => res.json({ message: 'Hello World!' }));
 
@@ -20,8 +21,6 @@ app.use(routerCurso);
 app.use(routerPago);
 
 /* MIDDLEWARE */
-/* analizar solicitudes de tipo de contenido - application/json */
-app.use(express.json()); /* es una función de middleware integrada en Express. Analiza las solicitudes entrantes con cargas JSON y se basa en body-parser */
 /* analizar solicitudes de tipo de contenido - application/x-www-form-urlencoded */
 app.use(express.urlencoded({ extended: true }));
 

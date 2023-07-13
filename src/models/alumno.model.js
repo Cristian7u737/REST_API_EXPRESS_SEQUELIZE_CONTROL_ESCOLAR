@@ -1,8 +1,9 @@
 /* importar modulos */
 import { DataTypes } from "sequelize";
 import db from '../config/connect.js';
-/* importar el modelo Curso */
+/* importar el modelo Curso y Profesor*/
 import { Curso } from "./curso.model.js";
+import { Profesor } from './profesor.model.js';
 /* Primero recibe el nombre de la tabla */
 export const Alumno = db.define('Alumno', {
     /* Recibe un objeto, los atributos del modelo */
@@ -58,5 +59,17 @@ Alumno.belongsTo(Curso, {/* Un Alumno pertenece a un Curso */
     foreignKey: 'cursoId',
     targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Curso */
 });
+
+/* Relacionar las tablas ONE TO MANY Profesor - Alumno */
+Profesor.hasMany(Alumno, { /* un Profesor puede tener muchos Alumnos */
+    foreignKey: 'profesorId',
+    sourceKey: 'id'
+});
+
+Alumno.belongsTo(Profesor, {/* Un Alumno pertenece a un Profesor */
+    foreignKey: 'profesorId',
+    targetKey: 'id' /* clave a la que tienden a ser objetivo que seria de Profesor */
+});
+
 /* Para hacer que se SINCRONICE con la DB */ 
 await Alumno.sync();

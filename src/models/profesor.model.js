@@ -49,7 +49,7 @@ Curso.hasMany(Profesor, { /* Un curso puede tener muchos Profesores */
 
 Profesor.belongsTo(Curso, {/* Un profesor pertenece a un Curso */
 foreignKey: 'cursoId',
-    targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Curso */
+    targetKey: 'id' /* clave a la que tienden a ser objetivo que seria de Curso */
 });
 
 /* Para hacer que se SINCRONICE con la DB */ 
