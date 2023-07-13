@@ -1,13 +1,14 @@
+/* Importar los modelos Alumno y Curso */
 import { Alumno } from "../models/alumno.model.js";
 import { Curso } from "../models/curso.model.js";
 
 /* Encontrar todos los alumnos que hayan */
 export const findAllAlumnos = async (req, res) => {
     try {
-        const alumno = await Alumno.findAll(); /* busca todos los registros */
-        res.json(alumno); /* la respuesta es lo que encontro companies en un objeto json */
+        const alumno = await Alumno.findAll(); /* busca todos los registros del Alumno */
+        return res.json(alumno); /* la respuesta es lo que encontro alumno en un objeto json */
     } catch (error) {
-        res.status(500).json([{ error: error.message }]);
+        return res.status(500).json([{ error: error.message }]);
     }
 };
 
@@ -15,7 +16,7 @@ export const findAllAlumnos = async (req, res) => {
 export const findAlumnoById = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const alumno = await Alumno.findOne({ where: { id } }); /* recupera exactamente UNA fila de todas las filas que coinciden con la consulta SQL */
-    if (!alumno) { /* evalua si el id de alumno es diferente / osea que no lo encuentra registrado*/
+    if (!alumno) { /* evalua si el id de alumno es diferente / osea que no lo encuentra registrado */
         return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
             mensaje: `No existe el alumno con el ID : ${id}.` /* manda un mensaje acerca del alumno que no se encontro con el id */
         });
@@ -26,12 +27,12 @@ export const findAlumnoById = async (req, res) => {
 /* Crear un Alumno*/
 export const createAlumnoByIdCurso = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const { nombreAlumno, cedulaAlumno, telefonoAlumno, correoAlumno, cursoId } = req.body; /* desestructurar el json del body */
         const existsTelefonoAlumno = await Alumno.findOne({ where: { telefonoAlumno } });/* busca dentro de Alumno si su Telefono estara repetida */
         const existsCedulaAlumno = await Alumno.findOne({ where: { cedulaAlumno } }); /* busca dentro de Alumno si su Cedula estara repetida */
         const existsCorreoAlumno = await Alumno.findOne({ where: { correoAlumno } }); /* busca dentro de Alumno si su Cedula estara repetida */
-        const curso = await Curso.findOne({ where: { id } }); /* busca en Curso por id para actualizarlo despues*/
+        const curso = await Curso.findOne({ where: { id } }); /* busca en Curso por id */
         if (!curso) { /* evalua si el id de Curso es diferente / osea que no lo encuentra registrado*/
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
                 mensaje: `No se puede crear el Alumno porque no existe el Curso con el id : ${id}.` /* manda un mensaje acerca de la Alumno que no se encontro con el id */
@@ -64,8 +65,7 @@ export const updateAlumnoById = async (req, res) => {
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
                 mensaje: `No se puede actualizar el Alumno porque no existe el Curso con el id : ${id}.` /* manda un mensaje acerca de la Alumno que no se encontro con el id */
             });
-        }
-        else if (!alumno) { /* si el id de alumno es diferente */
+        } else if (!alumno) { /* si el id de alumno es diferente */
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
                 mensaje: `No existe el Alumno con el ID: ${id}.` /* manda un mensaje acerca del Alumno que no se encontro con el id */
             }); /* evalua si la Cedula es diferente del Alumno / osea que no lo encuentra registrado*/
@@ -84,7 +84,7 @@ export const updateAlumnoById = async (req, res) => {
     }
 };
 
-/* Eliminar una compañia apartir de su id*/
+/* Eliminar una Alumno apartir de su id*/
 export const deleteAlumnoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */

@@ -1,3 +1,4 @@
+/* Importar el modelo Pago */
 import { Pago } from "../models/pago.model.js";
 
 /* Encontrar todos los pagos que hayan */
@@ -33,7 +34,7 @@ export const createPago = async (req, res) => {
     }
 };
 
-/* Actualizar una Pago*/
+/* Actualizar un Pago apartir de su Id*/
 export const updatePagoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */

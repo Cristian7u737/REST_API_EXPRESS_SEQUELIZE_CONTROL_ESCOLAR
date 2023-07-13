@@ -1,10 +1,6 @@
 /* importar modulos */
 import { DataTypes } from "sequelize";
 import db from '../config/connect.js';
-/* importar el modelo de Profesor, Pago y  Alumno */
-import { Profesor } from "./profesor.model.js";
-import { Alumno } from "./alumno.model.js";
-import { Pago } from "./pago.model.js";
 /* Primero recibe el nombre de la tabla */
 export const Curso = db.define('Curso', {
     /* Recibe un objeto, los atributos del modelo */
@@ -44,6 +40,5 @@ export const Curso = db.define('Curso', {
 //    targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Curso */
 //});
 
-
-
+/* Para hacer que se SINCRONICE con la DB */ 
 await Curso.sync(); 

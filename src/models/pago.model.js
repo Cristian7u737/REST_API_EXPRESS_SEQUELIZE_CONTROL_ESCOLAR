@@ -24,5 +24,5 @@ export const Pago = db.define('Pago', {
     timestamps: false /* no coloca los createDate y updateDate */
 });
 
-
-/* await Pago.sync(); */
+/* Para hacer que se SINCRONICE con la DB */ 
+await Pago.sync();

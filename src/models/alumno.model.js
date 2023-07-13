@@ -1,7 +1,7 @@
 /* importar modulos */
 import { DataTypes } from "sequelize";
 import db from '../config/connect.js';
-/* importar el modelo Pago */
+/* importar el modelo Curso */
 import { Curso } from "./curso.model.js";
 /* Primero recibe el nombre de la tabla */
 export const Alumno = db.define('Alumno', {
@@ -47,6 +47,7 @@ export const Alumno = db.define('Alumno', {
 //    foreignKey: 'alumnoId',
 //    targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Alumno */
 //});
+
 /* Relacionar las tablas ONE TO MANY Curso - Alumno*/
 Curso.hasMany(Alumno, { /* un Curso puede tener muchos Alumnos */
     foreignKey: 'cursoId',

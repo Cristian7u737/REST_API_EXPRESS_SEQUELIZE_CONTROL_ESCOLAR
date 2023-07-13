@@ -8,18 +8,20 @@ import routerProfesor from './src/routes/profesor.routes.js';
 import routerCurso from './src/routes/curso.routes.js';
 import routerPago from './src/routes/pago.routes.js';
 
-const app = express();
-app.use(express.json());
+const app = express(); /* para crear una aplicación usando express */
 
+/* simple ruta */
 app.get('/', (req, res) => res.json({ message: 'Hello World!' }));
+
 /* utilizar los enrutadores */
 app.use(routerAlumno);
 app.use(routerProfesor);
 app.use(routerCurso);
 app.use(routerPago);
-/* Middleware */
+
+/* MIDDLEWARE */
 /* analizar solicitudes de tipo de contenido - application/json */
-app.use(express.json());
+app.use(express.json()); /* es una función de middleware integrada en Express. Analiza las solicitudes entrantes con cargas JSON y se basa en body-parser */
 /* analizar solicitudes de tipo de contenido - application/x-www-form-urlencoded */
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +32,7 @@ try {
 } catch (error) {
     console.log(error);
 }
+
 /* declaración del puerto */
 const PORT = process.env.PORT || 3000;
 /* el servidor escucha */
