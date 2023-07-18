@@ -1,6 +1,7 @@
-/* Importar el modelo Pago */
-import { Alumno } from "../models/alumno.model.js";
+/* Importar el modelo Pago, Alumno y Curso */
 import { Pago } from "../models/pago.model.js";
+import { Alumno } from "../models/alumno.model.js";
+import { Curso } from './../models/curso.model.js';
 
 /* Encontrar todos los pagos que hayan */
 const findAllPagos = async (req, res) => {
@@ -25,17 +26,22 @@ const findPagoById = async (req, res) => {
 };
 
 /* Crear un Pago*/
-const createPagoByIdAlumno = async (req, res) => {
+const createPagoByIdAlumnoByIdCurso = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
-        const { precioCurso, aportePago, alumnoId } = req.body; /* desestructurar el json del body */
+        const { precioCurso, aportePago, cursoId, alumnoId } = req.body; /* desestructurar el json del body */
         const alumno = await Alumno.findOne({ where: { id } }); /* busca en Alumno por id */
-        if (!alumno) {
+        const curso = await Curso.findOne({ where: { id } }); /* busca en Alumno por id */
+        if (!curso) {
+            return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
+                mensaje: `No se puede crear el Pago porque no existe el Curso con el id : ${id}.` /* manda un mensaje acerca del Curso que no se encontro con el id */
+            });
+        } else if (!alumno) {
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
                 mensaje: `No se puede crear el Pago porque no existe el Alumno con el id : ${id}.` /* manda un mensaje acerca del Alumno que no se encontro con el id */
             });
         }
-        const newPago = await Pago.create({ precioCurso, aportePago, alumnoId }); /* Crea el Pago apartir del req.body */
+        const newPago = await Pago.create({ precioCurso, aportePago, cursoId, alumnoId }); /* Crea el Pago apartir del req.body */
         return res.status(201).json(newPago); /* responde la solicitud con lo que creo en newPago */
     } catch (error) {
         res.status(500).json([{ error: error.message }]);
@@ -47,14 +53,19 @@ const updatePagoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const pago = await Pago.findOne({ where: { id } }); /* busca en Pago por id para actualizarlo despues*/
-        const alumno = await Alumno.findOne({ where: { id } }); /* busca en Pago por id para actualizarlo despues*/
+        const alumno = await Alumno.findOne({ where: { id } }); /* busca en Alumno por id para actualizarlo despues*/
+        const curso = await Curso.findOne({ where: { id } }); /* busca en Curso por id para actualizarlo despues*/
         if (!pago) { /* si el id de pago es diferente */
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el repago solicitado. */
                 mensaje: `No pudo actualizar el Pago porque no existe el Pago con el ID : ${id}.` /* manda un mensaje acerca del Pago que no se encontro con el id */
             }); /* evalua si el Nombre del Pago es diferente del Pago / osea que no lo encuentra registrado*/
+        } else if (!curso) {
+            return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el repago solicitado. */
+                mensaje: `No pudo actualizar el Pago porque no existe el Curso con el ID : ${id}.` /* manda un mensaje acerca del Curso que no se encontro con el id */
+            }); /* evalua si el Nombre del Pago es diferente del Pago / osea que no lo encuentra registrado*/
         } else if (!alumno) {
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el repago solicitado. */
-                mensaje: `No pudo actualizar el Pago porque no existe el Alumno con el ID : ${id}.` /* manda un mensaje acerca del Pago que no se encontro con el id */
+                mensaje: `No pudo actualizar el Pago porque no existe el Alumno con el ID : ${id}.` /* manda un mensaje acerca del Alumno que no se encontro con el id */
             }); /* evalua si el Nombre del Pago es diferente del Pago / osea que no lo encuentra registrado*/
         }
         pago.set(req.body);/* actualiza los datos mediante set */
@@ -82,5 +93,5 @@ const deletePagoById = async (req, res) => {
     }
 };
 
-export { findAllPagos, findPagoById, createPagoByIdAlumno, updatePagoById, deletePagoById }
+export { findAllPagos, findPagoById, createPagoByIdAlumnoByIdCurso, updatePagoById, deletePagoById }
 
