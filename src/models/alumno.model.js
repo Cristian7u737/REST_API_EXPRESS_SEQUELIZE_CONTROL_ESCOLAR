@@ -38,17 +38,6 @@ export const Alumno = db.define('Alumno', {
     timestamps: false /* no coloca los createDate y updateDate */
 });
 
-/* Relacionar las tablas ONE TO MANY Alumno - Pago*/
-//Alumno.hasMany(Pago, { /* un Alumno puede tener muchos Pagos */
-//    foreignKey: 'alumnoId',
-//    sourceKey: 'id'
-//});
-
-//Pago.belongsTo(Alumno, {/* Un Pago pertenece a un Alumno */
-//    foreignKey: 'alumnoId',
-//    targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Alumno */
-//});
-
 /* Relacionar las tablas ONE TO MANY Curso - Alumno*/
 Curso.hasMany(Alumno, { /* un Curso puede tener muchos Alumnos */
     foreignKey: 'cursoId',

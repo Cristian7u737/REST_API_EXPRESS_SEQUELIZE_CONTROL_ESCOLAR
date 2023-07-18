@@ -29,16 +29,6 @@ export const Curso = db.define('Curso', {
     timestamps: false /* no coloca los createDate y updateDate */
 });
 
-/* Relacionar las tablas ONE TO MANY Curso - Pago*/
-//Curso.hasMany(Pago, { /* Un curso puede tener muchos Profesores */
-//    foreignKey: 'cursoId',
-//    sourceKey: 'id'
-//});
-
-//Pago.belongsTo(Curso, {/* Un pago pertenece a un Curso */
-//    foreignKey: 'cursoId',
-//    targetKey: 'id' /* clave a la que tienden a ser obejtivo que seria de Curso */
-//});
 
 /* Para hacer que se SINCRONICE con la DB */ 
 await Curso.sync(); 

@@ -3,7 +3,7 @@ import { Curso } from "../models/curso.model.js";
 import { Profesor } from "../models/profesor.model.js";
 
 /* Encontrar todos los profesores que hayan */
-export const findAllProfesores = async (req, res) => {
+const findAllProfesores = async (req, res) => {
     try {
         const profesor = await Profesor.findAll(); /* busca todos los registros */
         res.json(profesor); /* la respuesta es lo que encontro profesor en un objeto json */
@@ -13,7 +13,7 @@ export const findAllProfesores = async (req, res) => {
 };
 
 /* Encontrar un Profesor apartir de un ID */
-export const findProfesorById = async (req, res) => {
+const findProfesorById = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const profesor = await Profesor.findOne({ where: { id } }); /* recupera exactamente UNA fila de todas las filas que coinciden con la consulta SQL */
     if (!profesor) { /* evalua si el id de profesor es diferente / osea que no lo encuentra registrado*/
@@ -25,7 +25,7 @@ export const findProfesorById = async (req, res) => {
 };
 
 /* Crear un Profesor apartir del Id de un Curso*/
-export const createProfesorByIdCurso = async (req, res) => {
+const createProfesorByIdCurso = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const { nombreProfesor, cedulaProfesor, telefonoProfesor, correoProfesor, profesionProfesor, cursoId } = req.body; /* desestructurar el json del body */
@@ -53,7 +53,7 @@ export const createProfesorByIdCurso = async (req, res) => {
 };
 
 /* Actualizar una Profesor apartir de su Id*/
-export const updateProfesorById = async (req, res) => {
+const updateProfesorById = async (req, res) => {
     try {
         const { cedulaProfesor, telefonoProfesor, correoProfesor } = req.body; /* desestructura el objeto json para obtener el parametro name apartir de req */
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
@@ -68,7 +68,7 @@ export const updateProfesorById = async (req, res) => {
             });
         } else if (!profesor) { /* si el id de profesor es diferente */
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
-                mensaje: `No existe el Profesor con el ID : ${id}.` /* manda un mensaje acerca del Profesor que no se encontro con el id */
+                mensaje: `No se puede actualizar el Profesor porque no existe el Profesor con el ID : ${id}.` /* manda un mensaje acerca del Profesor que no se encontro con el id */
             }); /* evalua si la Cedula es diferente del Profesor / osea que no lo encuentra registrado*/
         } else if (existsTelefonoProfesor) { /* verifica si el Telefono del Profesor esta repetido o no */
             return res.json({ mensaje: `El Profesor con el telefono : ${telefonoProfesor} ya existe.` }); /* si esta repetido se lo indica */
@@ -86,7 +86,7 @@ export const updateProfesorById = async (req, res) => {
 };
 
 /* Eliminar un Profesor apartir de su id*/
-export const deleteProfesorById = async (req, res) => {
+const deleteProfesorById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const profesor = await Profesor.destroy({ where: { id } }); /* elimina un profesor apartir de un id */
@@ -101,5 +101,7 @@ export const deleteProfesorById = async (req, res) => {
         res.status(500).json([{ error: error.message }]);
     }
 };
+
+export { findAllProfesores, findProfesorById, createProfesorByIdCurso, updateProfesorById, deleteProfesorById }
 
 

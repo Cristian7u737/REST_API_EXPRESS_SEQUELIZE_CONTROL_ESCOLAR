@@ -4,7 +4,7 @@ import { Curso } from "../models/curso.model.js";
 import { Profesor } from "../models/profesor.model.js";
 
 /* Encontrar todos los alumnos que hayan */
-export const findAllAlumnos = async (req, res) => {
+const findAllAlumnos = async (req, res) => {
     try {
         const alumno = await Alumno.findAll(); /* busca todos los registros del Alumno */
         return res.json(alumno); /* la respuesta es lo que encontro alumno en un objeto json */
@@ -14,7 +14,7 @@ export const findAllAlumnos = async (req, res) => {
 };
 
 /* Encontrar un Alumno apartir de un ID */
-export const findAlumnoById = async (req, res) => {
+const findAlumnoById = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const alumno = await Alumno.findOne({ where: { id } }); /* recupera exactamente UNA fila de todas las filas que coinciden con la consulta SQL */
     if (!alumno) { /* evalua si el id de alumno es diferente / osea que no lo encuentra registrado */
@@ -26,7 +26,7 @@ export const findAlumnoById = async (req, res) => {
 };
 
 /* Crear un Alumno*/
-export const createAlumnoByIdCursoAndByIdProfesor = async (req, res) => {
+const createAlumnoByIdCursoAndByIdProfesor = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const { nombreAlumno, cedulaAlumno, telefonoAlumno, correoAlumno, cursoId, profesorId } = req.body; /* desestructurar el json del body */
@@ -51,6 +51,7 @@ export const createAlumnoByIdCursoAndByIdProfesor = async (req, res) => {
             return res.json({ mensaje: `El Alumno con el correro : ${correoAlumno} ya existe.` }); /* si esta repetido se lo indica */
         }
         const newAlumno = await Alumno.create({ nombreAlumno, cedulaAlumno, telefonoAlumno, correoAlumno, cursoId, profesorId }); /* Crea el Alumno apartir del req.body */
+        console.log(newAlumno);
         return res.status(201).json(newAlumno); /* responde la solicitud con lo que creo en newAlumno */
     } catch (error) {
         res.status(500).json([{ error: error.message }]);
@@ -58,7 +59,7 @@ export const createAlumnoByIdCursoAndByIdProfesor = async (req, res) => {
 };
 
 /* Actualizar una Alumno*/
-export const updateAlumnoById = async (req, res) => {
+const updateAlumnoById = async (req, res) => {
     try {
         const { cedulaAlumno, telefonoAlumno, correoAlumno } = req.body; /* desestructura el objeto json para obtener el parametro name apartir de req */
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
@@ -96,7 +97,7 @@ export const updateAlumnoById = async (req, res) => {
 };
 
 /* Eliminar una Alumno apartir de su id*/
-export const deleteAlumnoById = async (req, res) => {
+const deleteAlumnoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const alumno = await Alumno.destroy({ where: { id } }); /* elimina un alumno apartir de un id */
@@ -111,5 +112,7 @@ export const deleteAlumnoById = async (req, res) => {
         res.status(500).json([{ error: error.message }]);
     }
 };
+
+export { findAllAlumnos, findAlumnoById, createAlumnoByIdCursoAndByIdProfesor, updateAlumnoById, deleteAlumnoById }
 
 

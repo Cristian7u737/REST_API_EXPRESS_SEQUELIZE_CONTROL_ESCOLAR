@@ -1,8 +1,9 @@
 /* Importar el modelo Pago */
+import { Alumno } from "../models/alumno.model.js";
 import { Pago } from "../models/pago.model.js";
 
 /* Encontrar todos los pagos que hayan */
-export const findAllPagos = async (req, res) => {
+const findAllPagos = async (req, res) => {
     try {
         const pago = await Pago.findAll(); /* busca todos los registros */
         res.json(pago); /* la respuesta es lo que encontro pago en un objeto json */
@@ -12,7 +13,7 @@ export const findAllPagos = async (req, res) => {
 };
 
 /* Encontrar un Pago apartir de un ID */
-export const findPagoById = async (req, res) => {
+const findPagoById = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const pago = await Pago.findOne({ where: { id } }); /* recupera exactamente UNA fila de todas las filas que coinciden con la consulta SQL */
     if (!pago) { /* evalua si el id de pago es diferente / osea que no lo encuentra registrado*/
@@ -24,10 +25,17 @@ export const findPagoById = async (req, res) => {
 };
 
 /* Crear un Pago*/
-export const createPago = async (req, res) => {
+const createPagoByIdAlumno = async (req, res) => {
     try {
-        const { precioPago, aportePago } = req.body; /* desestructurar el json del body */
-        const newPago = await Pago.create({ precioPago, aportePago }); /* Crea el Pago apartir del req.body */
+        const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
+        const { precioCurso, aportePago, alumnoId } = req.body; /* desestructurar el json del body */
+        const alumno = await Alumno.findOne({ where: { id } }); /* busca en Alumno por id */
+        if (!alumno) {
+            return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el recurso solicitado. */
+                mensaje: `No se puede crear el Pago porque no existe el Alumno con el id : ${id}.` /* manda un mensaje acerca del Alumno que no se encontro con el id */
+            });
+        }
+        const newPago = await Pago.create({ precioCurso, aportePago, alumnoId }); /* Crea el Pago apartir del req.body */
         return res.status(201).json(newPago); /* responde la solicitud con lo que creo en newPago */
     } catch (error) {
         res.status(500).json([{ error: error.message }]);
@@ -35,13 +43,18 @@ export const createPago = async (req, res) => {
 };
 
 /* Actualizar un Pago apartir de su Id*/
-export const updatePagoById = async (req, res) => {
+const updatePagoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const pago = await Pago.findOne({ where: { id } }); /* busca en Pago por id para actualizarlo despues*/
+        const alumno = await Alumno.findOne({ where: { id } }); /* busca en Pago por id para actualizarlo despues*/
         if (!pago) { /* si el id de pago es diferente */
             return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el repago solicitado. */
-                mensaje: `No existe el Pago con el ID : ${id}.` /* manda un mensaje acerca del Pago que no se encontro con el id */
+                mensaje: `No pudo actualizar el Pago porque no existe el Pago con el ID : ${id}.` /* manda un mensaje acerca del Pago que no se encontro con el id */
+            }); /* evalua si el Nombre del Pago es diferente del Pago / osea que no lo encuentra registrado*/
+        } else if (!alumno) {
+            return res.status(404).json({ /* retorna la respuesta de la solicitud con el estatus 404. El servidor no pudo encontrar el repago solicitado. */
+                mensaje: `No pudo actualizar el Pago porque no existe el Alumno con el ID : ${id}.` /* manda un mensaje acerca del Pago que no se encontro con el id */
             }); /* evalua si el Nombre del Pago es diferente del Pago / osea que no lo encuentra registrado*/
         }
         pago.set(req.body);/* actualiza los datos mediante set */
@@ -53,7 +66,7 @@ export const updatePagoById = async (req, res) => {
 };
 
 /* Eliminar un Pago apartir de su id*/
-export const deletePagoById = async (req, res) => {
+const deletePagoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const pago = await Pago.destroy({ where: { id } }); /* elimina un pago apartir de un id */
@@ -69,4 +82,5 @@ export const deletePagoById = async (req, res) => {
     }
 };
 
+export { findAllPagos, findPagoById, createPagoByIdAlumno, updatePagoById, deletePagoById }
 

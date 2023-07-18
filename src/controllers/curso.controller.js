@@ -4,7 +4,7 @@ import { Curso } from "../models/curso.model.js";
 import { Profesor } from './../models/profesor.model.js';
 
 /* Encontrar todos los Cursos que hayan */
-export const findAllCursos = async (req, res) => {
+const findAllCursos = async (req, res) => {
     try {
         const curso = await Curso.findAll(); /* busca todos los registros */
         res.json(curso); /* la respuesta es lo que encontro curso en un objeto json */
@@ -14,7 +14,7 @@ export const findAllCursos = async (req, res) => {
 };
 
 /* Encontrar un Curso apartir de un ID */
-export const findCursoById = async (req, res) => {
+const findCursoById = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const curso = await Curso.findOne({ where: { id } }); /* recupera exactamente UNA fila de todas las filas que coinciden con la consulta SQL */
     if (!curso) { /* evalua si el id de curso es diferente / osea que no lo encuentra registrado*/
@@ -26,7 +26,7 @@ export const findCursoById = async (req, res) => {
 };
 
 /* Encontrar una Curso apartir de un ID y sus Alumnos que esten relacionados a ese ID */
-export const findCursoByIdFromAlumno = async (req, res) => {
+const findCursoByIdFromAlumno = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const curso = await Curso.findOne({ where: { id }, include: { model: Alumno, attributes: ['nombreAlumno', 'cedulaAlumno'] } }); /* busca en Curso por id e incluye el modelo Alumno para traerselos si esta ligado a ese ID del Curso*/
     if (!curso) { /* evalua si el id de Curso es diferente / osea que no lo encuentra registrado*/
@@ -38,7 +38,7 @@ export const findCursoByIdFromAlumno = async (req, res) => {
 };
 
 /* Encontrar una Curso apartir de un ID y sus Profesores que esten relacionados a ese ID */
-export const findCursoByIdFromProfesor = async (req, res) => {
+const findCursoByIdFromProfesor = async (req, res) => {
     const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
     const curso = await Curso.findOne({ where: { id }, include: { model: Profesor, attributes: ['nombreProfesor', 'cedulaProfesor', 'profesionProfesor'] } }); /* busca en Curso por id e incluye el modelo Profesor para traerselos si esta ligado a ese ID del Curso*/
     if (!curso) { /* evalua si el id de Curso es diferente / osea que no lo encuentra registrado*/
@@ -50,7 +50,7 @@ export const findCursoByIdFromProfesor = async (req, res) => {
 };
 
 /* Crear un Curso*/
-export const createCurso = async (req, res) => {
+const createCurso = async (req, res) => {
     try {
         const { nombreCurso, precioCurso, dateCurso } = req.body; /* desestructurar el json del body */
         const existsNombreCurso = await Curso.findOne({ where: { nombreCurso } }); /* busca dentro de curso si el nombre del curso estara repetido */
@@ -66,7 +66,7 @@ export const createCurso = async (req, res) => {
 };
 
 /* Actualizar una Curso*/
-export const updateCursoById = async (req, res) => {
+const updateCursoById = async (req, res) => {
     try {
         const { nombreCurso } = req.body; /* desestructurar el json del body */
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
@@ -88,7 +88,7 @@ export const updateCursoById = async (req, res) => {
 };
 
 /* Eliminar un Curso apartir de su id*/
-export const deleteCursoById = async (req, res) => {
+const deleteCursoById = async (req, res) => {
     try {
         const { id } = req.params; /* desestructura el objeto json para obtener el parametro id apartir de req */
         const curso = await Curso.destroy({ where: { id } }); /* elimina un curso apartir de un id */
@@ -104,4 +104,4 @@ export const deleteCursoById = async (req, res) => {
     }
 };
 
-
+export {findAllCursos, findCursoById, findCursoByIdFromAlumno, findCursoByIdFromProfesor, createCurso, updateCursoById, deleteCursoById }
